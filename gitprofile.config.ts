@@ -34,7 +34,7 @@ const CONFIG = {
   themeConfig: {
     // defaultTheme: 'light',
     defaultTheme: 'procyon',
-    disableSwitch: true, // fix theme switch
+    disableSwitch: false, // fix theme switch
   },
 };
 
