@@ -19,6 +19,11 @@ const CONFIG = {
       },
     },
   },
+  seo: {
+    title: 'Portfolio of roebi',
+    description: '',
+    imageURL: '',
+  },
   themeConfig: {
     // defaultTheme: 'light',
     defaultTheme: 'procyon',
