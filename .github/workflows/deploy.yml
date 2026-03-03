@@ -29,11 +29,16 @@ jobs:
           node-version: '24'
           cache: 'npm'
 
-      - name: Install your repo deps (installs gitprofile source into node_modules)
+      - name: Install your repo deps (fetches gitprofile source into node_modules)
         run: npm install
 
-      - name: Install gitprofile dependencies
-        run: cd node_modules/@arifszn/gitprofile && npm install
+      - name: Inject updated dependency files into gitprofile
+        run: |
+          cp gitprofile-deps/package.json node_modules/@arifszn/gitprofile/package.json
+          cp gitprofile-deps/package-lock.json node_modules/@arifszn/gitprofile/package-lock.json
+
+      - name: Install gitprofile dependencies (strict from lockfile)
+        run: cd node_modules/@arifszn/gitprofile && npm ci
 
       - name: Inject your config into gitprofile
         run: cp gitprofile.config.ts node_modules/@arifszn/gitprofile/gitprofile.config.ts

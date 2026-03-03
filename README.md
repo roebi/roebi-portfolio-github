@@ -9,23 +9,34 @@ This repo follows a **config-only** approach: instead of copying the full gitpro
 **What lives in this repo:**
 - `gitprofile.config.ts` — your personal portfolio configuration (the only file you edit)
 - `package.json` — single dependency: `@arifszn/gitprofile`
+- `gitprofile-deps/` — copy of gitprofile's `package.json` + `package-lock.json` for Dependabot monitoring
 - `.github/workflows/deploy.yml` — the build & deploy pipeline
-- `.github/workflows/init-lockfile.yml` — one-time setup: generates `package-lock.json`
+- `.github/workflows/init-lockfile.yml` — one-time setup: generates your `package-lock.json`
+- `.github/workflows/sync-gitprofile-deps.yml` — syncs `gitprofile-deps/` when gitprofile version is bumped
+- `.github/dependabot.yml` — weekly security monitoring for both your deps and gitprofile's deps
 
 Everything else (React, Vite, Tailwind, all source files) lives inside gitprofile and is never copied here.
 
-## 🚀 First Time Setup — Generate the Lockfile
+---
 
-Before the first deploy, `package-lock.json` must be generated. Since it is not committed to the repo, run this **once manually**:
+## 🚀 First Time Setup
 
-1. Go to **Actions** → **Generate Lockfile**
-2. Click **Run workflow**
+Run these workflows **once** in this order before the first deploy:
 
-This runs `.github/workflows/init-lockfile.yml` which:
-- runs `npm install --package-lock-only` (resolves dependencies without installing)
-- commits and pushes the resulting `package-lock.json` back to `main` via `github-actions[bot]`
+### Step 1 — Generate your lockfile
+1. Go to **Actions** → **Generate Lockfile** → **Run workflow**
 
-After this step, `package-lock.json` exists in the repo and the deploy workflow can use it. You only need to repeat this if you delete `package-lock.json` or change `package.json`.
+Runs `npm install --package-lock-only` and commits `package-lock.json` to `main`.
+
+### Step 2 — Sync gitprofile-deps
+1. Go to **Actions** → **Sync gitprofile-deps** → **Run workflow**
+
+Copies gitprofile's `package.json` and `package-lock.json` into the `gitprofile-deps/` folder and commits them. Dependabot will monitor this folder for security updates from now on.
+
+### Step 3 — Deploy
+Push any change to `main`, or go to **Actions** → **Deploy Portfolio** → **Run workflow**.
+
+---
 
 ## ⚙️ How it Works — Build & Deploy Workflow
 
@@ -35,20 +46,26 @@ On every push to `main`, the GitHub Action does the following:
 1. npm install
    → fetches gitprofile source from GitHub into node_modules/
 
-2. cd node_modules/@arifszn/gitprofile && npm install
-   → installs gitprofile's own build dependencies (Vite, Tailwind, etc.)
+2. cp gitprofile-deps/package.json + package-lock.json
+       → node_modules/@arifszn/gitprofile/
+   → injects the Dependabot-maintained lockfile into gitprofile
 
-3. cp gitprofile.config.ts node_modules/@arifszn/gitprofile/gitprofile.config.ts
+3. cd node_modules/@arifszn/gitprofile && npm ci
+   → installs gitprofile's dependencies strictly from the updated lockfile
+
+4. cp gitprofile.config.ts node_modules/@arifszn/gitprofile/gitprofile.config.ts
    → injects your personal config into the gitprofile source
 
-4. cd node_modules/@arifszn/gitprofile && npm run build
+5. cd node_modules/@arifszn/gitprofile && npm run build
    → builds the portfolio app, producing dist/
 
-5. cp -r node_modules/@arifszn/gitprofile/dist ./dist
+6. cp -r node_modules/@arifszn/gitprofile/dist ./dist
    → brings the built output back to repo root
 
-6. Deploy dist/ to GitHub Pages
+7. Deploy dist/ to GitHub Pages
 ```
+
+---
 
 ## 🔧 Configuration
 
@@ -57,14 +74,25 @@ Edit `gitprofile.config.ts` to update your portfolio. Key fields:
 ```typescript
 const CONFIG = {
   github: {
-    username: 'roebi',        // your GitHub username
+    username: 'roebi',
   },
-  base: '/roebi-portfolio-github/', // your GitHub Pages repo path
+  base: '/roebi-portfolio-github/',
+  seo: {
+    title: 'Portfolio of roebi',
+    description: '',
+    imageURL: '',
+  },
+  googleAnalytics: {
+    id: '',
+  },
+  hotjar: {
+    id: '',
+    snippetVersion: 6,
+  },
   themeConfig: {
     defaultTheme: 'procyon',
     disableSwitch: true,
   },
-  // ... projects, social links, skills, etc.
 };
 
 export default CONFIG;
@@ -72,13 +100,29 @@ export default CONFIG;
 
 See the [gitprofile documentation](https://github.com/arifszn/gitprofile/blob/main/README.md) for all available config options.
 
+---
+
+## 🔄 Keeping Dependencies Up to Date
+
+### Dependabot (automatic)
+Dependabot monitors two locations weekly:
+- `/` — your own `package.json`
+- `/gitprofile-deps` — gitprofile's dependencies
+
+It automatically opens Pull Requests to update `package-lock.json` files when security fixes are available. Merge these after verifying a successful build.
+
+### When you bump the gitprofile version (manual)
+If you update `@arifszn/gitprofile` to a new version in your `package.json`:
+
+1. Go to **Actions** → **Sync gitprofile-deps** → **Run workflow**
+2. This re-copies the new `package.json` and `package-lock.json` from the new version into `gitprofile-deps/`
+3. Commit the result — Dependabot will now monitor the new version's dependencies
+
+---
+
 ## 🌐 Live Portfolio
 
 👉 [https://roebi.github.io/roebi-portfolio-github/](https://roebi.github.io/roebi-portfolio-github/)
-
-## 🔄 Dependency Updates
-
-[Dependabot](https://github.com/roebi/roebi-portfolio-github/pulls) is enabled and automatically creates pull requests for indirect dependency updates in `package-lock.json`. Merge these after verifying a successful build.
 
 ---
 

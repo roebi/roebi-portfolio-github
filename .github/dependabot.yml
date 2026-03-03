@@ -1,8 +1,11 @@
 version: 2
 updates:
-  - package-ecosystem: 'npm'
-    directory: '/'
+  - package-ecosystem: npm
+    directory: /                  # your own package.json
     schedule:
-      interval: 'weekly'
-    open-pull-requests-limit: 10
+      interval: weekly
 
+  - package-ecosystem: npm
+    directory: /gitprofile-deps   # gitprofile's dependencies — monitored for security updates
+    schedule:
+      interval: weekly
