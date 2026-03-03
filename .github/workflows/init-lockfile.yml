@@ -1,13 +1,13 @@
 name: Generate Lockfile
 
 on:
-  workflow_dispatch: # Ermöglicht das manuelle Starten unter dem Tab "Actions"
+  workflow_dispatch: # Enables manual startup under the "Actions" tab
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Erforderlich, um die Datei zurück ins Repo zu pushen
+      contents: write # Required to push the file back to the repository
     
     steps:
       - name: Checkout Code
@@ -17,7 +17,7 @@ jobs:
         uses: [actions/setup-node@v4](https://github.com/actions/setup-node)
         with:
           node-version: 20
-          # Wichtig: Hier kein 'cache', da die Lock-Datei ja noch fehlt!
+          # Important: No 'cache' here, as the lock file is still missing!
 
       - name: Create package-lock.json
         run: [npm install --package-lock-only](https://docs.npmjs.com/cli/v10/commands/npm-install#package-lock-only)
