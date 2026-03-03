@@ -10,8 +10,22 @@ This repo follows a **config-only** approach: instead of copying the full gitpro
 - `gitprofile.config.ts` — your personal portfolio configuration (the only file you edit)
 - `package.json` — single dependency: `@arifszn/gitprofile`
 - `.github/workflows/deploy.yml` — the build & deploy pipeline
+- `.github/workflows/init-lockfile.yml` — one-time setup: generates `package-lock.json`
 
 Everything else (React, Vite, Tailwind, all source files) lives inside gitprofile and is never copied here.
+
+## 🚀 First Time Setup — Generate the Lockfile
+
+Before the first deploy, `package-lock.json` must be generated. Since it is not committed to the repo, run this **once manually**:
+
+1. Go to **Actions** → **Generate Lockfile**
+2. Click **Run workflow**
+
+This runs `.github/workflows/init-lockfile.yml` which:
+- runs `npm install --package-lock-only` (resolves dependencies without installing)
+- commits and pushes the resulting `package-lock.json` back to `main` via `github-actions[bot]`
+
+After this step, `package-lock.json` exists in the repo and the deploy workflow can use it. You only need to repeat this if you delete `package-lock.json` or change `package.json`.
 
 ## ⚙️ How it Works — Build & Deploy Workflow
 
@@ -58,7 +72,7 @@ export default CONFIG;
 
 See the [gitprofile documentation](https://github.com/arifszn/gitprofile/blob/main/README.md) for all available config options.
 
-## 🚀 Live Portfolio
+## 🌐 Live Portfolio
 
 👉 [https://roebi.github.io/roebi-portfolio-github/](https://roebi.github.io/roebi-portfolio-github/)
 
