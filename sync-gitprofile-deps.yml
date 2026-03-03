@@ -21,6 +21,15 @@ jobs:
       - name: Install repo deps (fetches gitprofile source into node_modules)
         run: npm install
 
+      - name: Generate gitprofile package-lock.json if not present
+        run: |
+          if [ -f node_modules/@arifszn/gitprofile/package-lock.json ]; then
+            echo "package-lock.json found in fetched source, using it directly"
+          else
+            echo "package-lock.json not found, generating it now"
+            cd node_modules/@arifszn/gitprofile && npm install --package-lock-only
+          fi
+
       - name: Copy gitprofile package.json and package-lock.json to gitprofile-deps
         run: |
           mkdir -p gitprofile-deps
