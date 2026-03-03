@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write # Required to push the file back to the repository
-    
+
     steps:
       - name: Checkout Code
         uses: [actions/checkout@v4](https://github.com)
