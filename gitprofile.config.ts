@@ -9,7 +9,8 @@ const CONFIG = {
     github: {
       display: true,
       header: 'My Projects',
-      mode: 'manual' {
+      mode: 'manual',
+      manual: {
         projects: [
           'roebi/aider-skills',
           'roebi/agent-skills',
