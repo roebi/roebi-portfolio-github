@@ -3,7 +3,7 @@
 const CONFIG = {
   github: {
     username: 'roebi', // Your GitHub org/user name. (This is the only required config)
-  }
+  },
   base: '/roebi-portfolio-github/', // use '/repo-name/', if you host on GitHub Pages (Subdirectory)
   projects: {
     github: {
@@ -22,9 +22,9 @@ const CONFIG = {
   themeConfig: {
     // defaultTheme: 'light',
     defaultTheme: 'procyon',
-    disableSwitch: true // fix theme switch
+    disableSwitch: true, // fix theme switch
   },
 };
 
-export default config;
+export default CONFIG;
 
