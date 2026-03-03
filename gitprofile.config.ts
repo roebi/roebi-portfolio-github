@@ -9,13 +9,14 @@ const CONFIG = {
     github: {
       display: true,
       header: 'My Projects',
-      mode: 'automatic',
-      automatic: {
-        sortBy: 'stars',
-        limit: 8,
-        exclude: {
-          forks: false,
-        },
+      mode: 'manual' {
+        projects: [
+          'roebi/aider-skills',
+          'roebi/agent-skills',
+          'roebi/awesome-agent-skills',
+          'roebi/github-api-get',
+          'roebi/github-api-get-nodejs-example',
+        ],
       },
     },
   },
@@ -33,8 +34,9 @@ const CONFIG = {
   },
   themeConfig: {
     // defaultTheme: 'light',
-    defaultTheme: 'procyon',
-    disableSwitch: false, // fix theme switch
+    // defaultTheme: 'procyon',
+    defaultTheme: 'emerald',
+    disableSwitch: true, // fix theme switch
   },
 };
 
