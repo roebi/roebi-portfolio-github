@@ -24,6 +24,13 @@ const CONFIG = {
     description: '',
     imageURL: '',
   },
+  googleAnalytics: {
+    id: '',
+  },
+  hotjar: {
+    id: '',
+    snippetVersion: 6,
+  },
   themeConfig: {
     // defaultTheme: 'light',
     defaultTheme: 'procyon',
