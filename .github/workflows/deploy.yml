@@ -29,11 +29,20 @@ jobs:
           node-version: '24'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install your repo deps (installs gitprofile source into node_modules)
         run: npm install
 
-      - name: Build project
-        run: npm run build
+      - name: Install gitprofile dependencies
+        run: cd node_modules/@arifszn/gitprofile && npm install
+
+      - name: Inject your config into gitprofile
+        run: cp gitprofile.config.ts node_modules/@arifszn/gitprofile/gitprofile.config.ts
+
+      - name: Build gitprofile
+        run: cd node_modules/@arifszn/gitprofile && npm run build
+
+      - name: Copy dist output to repo root
+        run: cp -r node_modules/@arifszn/gitprofile/dist ./dist
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -43,4 +52,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
