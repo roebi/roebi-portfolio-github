@@ -1,32 +1,31 @@
 name: Generate Lockfile
 
 on:
-  workflow_dispatch: # Enables manual startup under the "Actions" tab
+  workflow_dispatch:
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Required to push the file back to the repository
-
+      contents: write
+    
     steps:
       - name: Checkout Code
-        uses: [actions/checkout@v4](https://github.com)
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: [actions/setup-node@v4](https://github.com/actions/setup-node)
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          # Important: No 'cache' here, as the lock file is still missing!
 
       - name: Create package-lock.json
-        run: [npm install --package-lock-only](https://docs.npmjs.com/cli/v10/commands/npm-install#package-lock-only)
+        run: npm install --package-lock-only
 
       - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add package-lock.json
-          git commit -m "chore: add package-lock.json via GitHub Action"
+          git commit -m "chore: add package-lock.json via GitHub Action" || echo "No changes to commit"
           git push
 
