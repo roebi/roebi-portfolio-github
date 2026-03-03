@@ -1,7 +1,7 @@
 name: Sync gitprofile-deps
 
 on:
-  workflow_dispatch: # run manually after bumping gitprofile version in package.json
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -21,6 +21,10 @@ jobs:
       - name: Install repo deps (fetches gitprofile into node_modules)
         run: npm install
 
+      - name: Generate gitprofile package-lock.json
+        working-directory: node_modules/@arifszn/gitprofile
+        run: npm install --package-lock-only
+
       - name: Copy gitprofile package.json and package-lock.json to gitprofile-deps
         run: |
           mkdir -p gitprofile-deps
@@ -34,3 +38,4 @@ jobs:
           git add gitprofile-deps/package.json gitprofile-deps/package-lock.json
           git commit -m "chore: sync gitprofile-deps from @arifszn/gitprofile" || echo "No changes to commit"
           git push
+          
