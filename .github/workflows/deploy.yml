@@ -47,7 +47,12 @@ jobs:
         run: cd node_modules/@arifszn/gitprofile && npm run build
 
       - name: Copy dist output to repo root
-        run: cp -r node_modules/@arifszn/gitprofile/dist ./dist
+        run: |
+          rm -rf ./dist
+          cp -r node_modules/@arifszn/gitprofile/dist ./dist
+
+      - name: Inject Google verification file
+        run: cp google63e101bfd3467bfb.html ./dist/google63e101bfd3467bfb.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
