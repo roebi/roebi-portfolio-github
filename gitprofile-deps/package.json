@@ -49,7 +49,7 @@
     "tailwindcss": "^4.1.11",
     "typescript": "^7.0.2",
     "vail": "^1.0.3",
-    "vite": "^8.0.16",
+    "vite": "^8.1.6",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-pwa": "^1.0.1"
   },
